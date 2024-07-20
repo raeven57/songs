@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendations</title>
+</head>
+<body>
+    <h1>Collaborative Filtering Recommendations:</h1>
+    <ul>
+        {% for track in collab_filtering_recommendations %}
+        <li>
+            <input type="checkbox" name="track_ids" value="{{ track['id'] }}">
+            {{ track['name'] }} by {{ track['artists'][0]['name'] }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h1>Content-Based Filtering Recommendations:</h1>
+    <ul>
+        {% for track in content_filtering_recommendations %}
+        <li>
+            <input type="checkbox" name="track_ids" value="{{ track['id'] }}">
+            {{ track['name'] }} by {{ track['artists'][0]['name'] }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <form action="{{ url_for('create_playlist_route') }}" method="post">
+        <input type="hidden" name="mood" value="{{ mood }}">
+        <input type="submit" value="Create Playlist">
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

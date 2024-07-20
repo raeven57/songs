@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song Recommendation System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 50px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .recommendation { border: 1px solid #ccc; padding: 20px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Song Recommendation System</h1>
+        <form id="recommendationForm">
+            <label for="songId">Enter Song ID:</label>
+            <input type="text" id="songId" name="songId" required>
+            <button type="submit">Get Recommendations</button>
+        </form>
+        <div id="recommendations"></div>
+    </div>
+    <script>
+        document.getElementById('recommendationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const songId = document.getElementById('songId').value;
+            fetch(`/recommend?song_id=${songId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const recommendationsDiv = document.getElementById('recommendations');
+                    recommendationsDiv.innerHTML = '';
+                    if (data.error) {
+                        recommendationsDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+                    } else {
+                        data.forEach(track => {
+                            const trackDiv = document.createElement('div');
+                            trackDiv.classList.add('recommendation');
+                            trackDiv.innerHTML = `
+                                <p><strong>${track.name}</strong> by ${track.artist}</p>
+                                <p>Album: ${track.album}</p>
+                                <p><a href="${track.preview_url}" target="_blank">Listen to preview</a></p>
+                            `;
+                            recommendationsDiv.appendChild(trackDiv);
+                        });
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('recommendations').innerHTML = `<p>Error: ${error.message}</p>`;
+                });
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
